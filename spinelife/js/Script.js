@@ -6,12 +6,14 @@ var container;
 
 var camera, scene, renderer;
 
-var mouseX = 0, mouseY = 0;
+//var mouseX = 0, mouseY = 0;
 
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 
 var object;
+
+var controls;
 
 init();
 animate();
@@ -36,17 +38,21 @@ function init() {
     camera.add( pointLight );
     scene.add( camera );
 
+
+
     // manager
 
     function loadModel() {
 
         object.traverse( function ( child ) {
 
-            if ( child.isMesh ) child.material.map = texture;
+           // if ( child.isMesh ) child.material.map = texture;
 
         } );
 
-        object.position.y = - 95;
+        object.position.y = -20;
+        object.scale.set(5,5,5);
+
         scene.add( object );
 
     }
@@ -61,9 +67,9 @@ function init() {
 
     // texture
 
-   var textureLoader = new THREE.TextureLoader( manager );
+  // var textureLoader = new THREE.TextureLoader( manager );
 
-   var texture = textureLoader.load( 'textures/uv_grid_opengl.jpg' );
+  // var texture = textureLoader.load( 'textures/uv_grid_opengl.jpg' );
 
     // model
 
@@ -82,7 +88,7 @@ function init() {
 
     var loader = new THREE.OBJLoader( manager );
 
-    loader.load( 'models/male02.obj', function ( obj ) {
+    loader.load( 'models/spin.obj', function ( obj ) {
 
         object = obj;
 
@@ -95,7 +101,13 @@ function init() {
     renderer.setSize( window.innerWidth, window.innerHeight );
     container.appendChild( renderer.domElement );
 
-    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+    // controls for the mouse managing
+    controls = new THREE.OrbitControls( camera, renderer.domElement );
+    controls.target.set( 0, -20, 0 );
+    controls.enablePan = false;
+
+
+    //document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
     //
 
@@ -133,8 +145,8 @@ function animate() {
 
 function render() {
 
-    camera.position.x += ( mouseX - camera.position.x ) * .05;
-    camera.position.y += ( - mouseY - camera.position.y ) * .05;
+   // camera.position.x += ( mouseX - camera.position.x ) * .05;
+    //camera.position.y += ( - mouseY - camera.position.y ) * .05;
 
     camera.lookAt( scene.position );
 
