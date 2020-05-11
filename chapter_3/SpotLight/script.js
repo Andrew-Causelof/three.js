@@ -83,6 +83,9 @@ function init() {
 
     scene.add(SpotLight);
 
+    var helper = new THREE.CameraHelper( camera );
+    scene.add( helper );
+
      // add a small sphere simulating the pointlight
 
      var sphereLight = new THREE.SphereGeometry(0.2);
@@ -145,9 +148,10 @@ function init() {
     gui.add(controls, 'exponent', 0, 100).onChange(function (e) {
         SpotLight.exponent = e;
     });
-    gui.add(controls, 'debug').onChange(function (e) {
-        SpotLight.shadowCameraVisible = e;
-    });
+ //   gui.add(controls, 'debug').onChange(function (e) {
+        //SpotLight.shadowCameraVisible = e;
+ 
+//    });
     gui.add(controls, 'castShadow').onChange(function (e) {
         SpotLight.castShadow = e;
     });
