@@ -1,0 +1,43 @@
+
+<!-- Javascript code that runs our Three.js examples -->
+<script type="text/javascript">
+
+    // once everything is loaded, we run our Three.js stuff.
+    function init() {
+
+
+        render();
+
+            // move the light simulation
+            if (!stopMovingLight) {
+                if (phase > 2 * Math.PI) {
+                    invert = invert * -1;
+                    phase -= 2 * Math.PI;
+                } else {
+                    phase += controls.rotationSpeed;
+                }
+                sphereLightMesh.position.z = +(7 * (Math.sin(phase)));
+                sphereLightMesh.position.x = +(14 * (Math.cos(phase)));
+                sphereLightMesh.position.y = 10;
+
+                if (invert < 0) {
+                    var pivot = 14;
+                    sphereLightMesh.position.x = (invert * (sphereLightMesh.position.x - pivot)) + pivot;
+                }
+
+                spotLight.position.copy(sphereLightMesh.position);
+            }
+
+            // render using requestAnimationFrame
+            requestAnimationFrame(render);
+
+
+            renderer.render(scene, camera);
+        }
+
+    }
+
+    window.onload = init;
+
+
+</script>
