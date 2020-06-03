@@ -8,3 +8,42 @@ body {
 	margin: auto;
 	
 }
+
+.loading{
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background-color: #111;
+	z-index: 9999999999999;
+  }
+  
+  .load-circle {
+	margin: 50vh auto;
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	border: 10px solid #111;
+	border-top: 10px solid rgb(57, 152, 241);
+	-webkit-animation: rotate 1.2s infinite linear;
+	animation: rotate 1.2s infinite linear;
+  }
+  
+  @-webkit-keyframes rotate {
+	0%{
+	  transform: rotate(0deg);
+	}
+	100%{
+	  transform: rotate(360deg);
+	}
+  }
+  
+  @keyframes rotate {
+	0%{
+	  transform: rotate(0deg);
+	}
+	100%{
+	  transform: rotate(360deg);
+	}
+  }

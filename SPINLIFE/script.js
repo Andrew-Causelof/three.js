@@ -11,7 +11,14 @@ scene = new THREE.Scene();
 
 
 var absorberColor = new THREE.MeshMatcapMaterial({ color: 0x178FFF });
+var brainColor = new THREE.MeshMatcapMaterial({ color: 0x7f0000 });
+
 var visible = true;
+
+$(window).on("load",function (){
+    $(".loading").fadeOut(500);
+	});
+
 
 
 init();
@@ -79,7 +86,8 @@ function loader() {
     loader.setDRACOLoader( dracoLoader );
 
     //	var absorberMaterial = new THREE.MeshPhongMaterial({ color: 0xa65e00 });
-    // Downloading human cord only
+    // Downloading human spine only
+
     loader.load( 'human_cord_only.gltf', function ( glb ) {
         glb.scene.traverse( function ( child ) {
             if ( child.isMesh ) {
@@ -96,26 +104,47 @@ function loader() {
     } );
     // Downloading absorbers
 
-                loader.load( 'absorbers.gltf', function ( glb ) {
-                    
-                        glb.scene.traverse( function ( child ) {
-                            if ( child.isMesh ) {
-                                child.castShadow = true;
-                                child.material = absorberColor;
-                            }
-                        } );
-                        var absorbers = glb.scene;                           
-                        absorbers.scale.set(0.06,0.06,0.06);
-                        
-                        absorbers.position.y = -18;
-                        absorbers.color = new THREE.Color(0x00A8E7);
-                        absorbers.visible = true;
-                        scene.add( absorbers );
-                        render();	
-                    } );
+     loader.load( 'absorbers.gltf', function ( glb ) {
+         
+             glb.scene.traverse( function ( child ) {
+                 if ( child.isMesh ) {
+                     child.castShadow = true;
+                     child.material = absorberColor;
+                 }
+             } );
+             var absorbers = glb.scene;                           
+             absorbers.scale.set(0.06,0.06,0.06);
+             
+             absorbers.position.y = -18;
+             absorbers.color = new THREE.Color(0x00A8E7);
+             absorbers.visible = true;
+             scene.add( absorbers );
+             render();	
+    } );
+
+    // Downloading human cord
+    loader.load( 'exporting_cord.gltf', function ( glb ) {
+         
+        glb.scene.traverse( function ( child ) {
+            if ( child.isMesh ) {
+                child.castShadow = true;
+                child.material = brainColor;
+            }
+        } );
+        var absorbers = glb.scene;                           
+        absorbers.scale.set(0.06,0.06,0.06);
+        
+        absorbers.position.y = -18;
+        absorbers.visible = true;
+        scene.add( absorbers );
+        render();	
+} );
+
 }
 
 function environment(){
     visible = !visible;
 }
+
+
 

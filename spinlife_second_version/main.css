@@ -1,0 +1,10 @@
+body {
+	margin: 0;
+	overscroll-behavior: none;
+}
+
+#one {
+	background-color: transparent;
+	margin: auto;
+	
+}
