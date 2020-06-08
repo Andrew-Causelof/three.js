@@ -11,15 +11,9 @@ scene = new THREE.Scene();
 
 
 var absorberColor = new THREE.MeshMatcapMaterial({ color: 0x178FFF });
-var brainColor = new THREE.MeshMatcapMaterial({ color: 0x7f0000 });
+var brainColor = new THREE.MeshMatcapMaterial({ color: 0x660000 });
 
 var visible = true;
-
-$(window).on("load",function (){
-    $(".loading").fadeOut(500);
-	});
-
-
 
 init();
 render();
@@ -33,6 +27,7 @@ function init() {
 						scene.background = envMap;
 						scene.environment = envMap;
                         render();	
+                        console.log(envMap);
         } );
     } 
 
@@ -88,7 +83,7 @@ function loader() {
     //	var absorberMaterial = new THREE.MeshPhongMaterial({ color: 0xa65e00 });
     // Downloading human spine only
 
-    loader.load( 'human_cord_only.gltf', function ( glb ) {
+    loader.load( 'bones.gltf', function ( glb ) {
         glb.scene.traverse( function ( child ) {
             if ( child.isMesh ) {
     		//	child.material = spinColor;
@@ -104,7 +99,7 @@ function loader() {
     } );
     // Downloading absorbers
 
-     loader.load( 'absorbers.gltf', function ( glb ) {
+     loader.load( 'absorbers_.gltf', function ( glb ) {
          
              glb.scene.traverse( function ( child ) {
                  if ( child.isMesh ) {
@@ -119,24 +114,25 @@ function loader() {
              absorbers.color = new THREE.Color(0x00A8E7);
              absorbers.visible = true;
              scene.add( absorbers );
+ //            absorbers.children[0].receiveShadow= false;
+ //            console.log(absorbers.children[0]);
              render();	
     } );
 
     // Downloading human cord
-    loader.load( 'exporting_cord.gltf', function ( glb ) {
+    loader.load( 'cord.gltf', function ( glb ) {
          
         glb.scene.traverse( function ( child ) {
             if ( child.isMesh ) {
                 child.castShadow = true;
-                child.material = brainColor;
             }
         } );
-        var absorbers = glb.scene;                           
-        absorbers.scale.set(0.06,0.06,0.06);
+        var root = glb.scene;                           
+        root.scale.set(0.06,0.06,0.06);
         
-        absorbers.position.y = -18;
-        absorbers.visible = true;
-        scene.add( absorbers );
+        root.position.y = -18;
+        root.visible = true;
+        scene.add( root );
         render();	
 } );
 
