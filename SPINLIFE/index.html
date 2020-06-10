@@ -17,17 +17,31 @@
 	</head>
 
 	<body>
+
 		<div class="loading">
 			<div class="load-circle">
 			</div>
 		</div>
+
+	
+		<button class="buttons" id="screenshot" type="button">Save</button>
+		<button class="buttons" id="hdr" type="button">HDR</button>
+		<button class="buttons" id="skin" type="button">Skin</button>
+		<input type="range" min="0" max="100" step="2" oninput="range()" id='range'>
+
+		
 		<script>
 			$(window).on("load",function (){
 			    $(".loading").fadeOut(500);
 			});
 		</script>
+		
 
 		<script src = 'script.js'></script>	
+
+		<!--Simple range organization -->
+	
+		<!-- <p id="paragraph"></p> -->
 
 	</body>
 </html>
