@@ -81,6 +81,12 @@ body {
 	left: 10px;
 	top: 90px;
   }
+
+  #lables {
+	  left: 10px;
+	  top: 130px;
+
+  }
   #range {
 	  position: absolute;
 	  width: 30%;
