@@ -2,7 +2,7 @@ var container, controls;
 var camera, scene, renderer;
 
 // so defenetly it needs to do configurator right here 
-var pmremGenerator, envMap;  // clinic environement - global variables
+var pmremGenerator, envMap, backgroundColor;  // clinic environement - global variables
 var absorberColor = new THREE.MeshMatcapMaterial({ color: 0x178FFF });
 //var brainColor = new THREE.MeshMatcapMaterial({ color: 0x660000 });
 //var boneColor = new THREE.MeshMatcapMaterial({ color: 0xeae8dc });
@@ -20,19 +20,15 @@ document.body.appendChild( container );
 camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.25, 300 );
 //camera.position.set( - 30, 20, 20 );  // common view
  camera.position.set( 0, 0, 40 ); //use for sprites only
-//camera.rotation.set(0, 0, 0);
-
-console.log(camera);
-
 scene = new THREE.Scene();
 
-scene.background = new THREE.Color('white');
+//scene.background = new THREE.Color('white');
+backgroundColor = new THREE.Color(0x485770);
+//scene.background = new THREE.Color(0x9c9a97);
 /*
 var helper = new THREE.CameraHelper( camera );
 scene.add( helper );
 */
-
-
 
 init();
 render();
@@ -52,7 +48,9 @@ function init() {
     pmremGenerator.compileEquirectangularShader();
 
     loader();
-    RGBELoader(); 
+    RGBELoader();
+   // backgroundtextureLoader(); 
+    spineSprites();
     //Lighting();
 
 	controls = new THREE.OrbitControls( camera, renderer.domElement );
@@ -80,15 +78,28 @@ function render() {
 }
 
 function RGBELoader() {
-    
     new THREE.RGBELoader().setDataType( THREE.UnsignedByteType ).setPath( 'textures/' ).load( 'surgery_1k.hdr',
     function ( texture ) {
                     envMap = pmremGenerator.fromEquirectangular( texture ).texture;
-                    scene.background = envMap;
+                    //scene.background = envMap;
                     scene.environment = envMap;
+                    scene.background = backgroundColor;                  
                     render();	
-    } );
-    
+    } );  
+}
+
+function backgroundtextureLoader() {
+    const loader = new THREE.CubeTextureLoader();
+    const texture = loader.load([
+      'backgroundtexture/pos-x.jpg',
+      'backgroundtexture/neg-x.jpg',
+      'backgroundtexture/pos-y.jpg',
+      'backgroundtexture/neg-y.jpg',
+      'backgroundtexture/pos-z.jpg',
+      'backgroundtexture/neg-z.jpg',
+    ]);
+    scene.background = texture;
+    scene.environment = texture;
 }
 
 function loader() {
@@ -105,27 +116,27 @@ function loader() {
             }
         } );
         bones = glb.scene;                           
-        bones.scale.set(0.06,0.06,0.06);
+        bones.scale.set( 0.06, 0.06, 0.06 );
         bones.position.y = -18;
 
               //поясничный отдел L1-L5
       lumbar = bones.clone();
-      lumbar.children = lumbar.children.slice(0, 5);
+      lumbar.children = lumbar.children.slice( 0, 5 );
       scene.add( lumbar );
     
       //грудной отдел
       thoracic = bones.clone();
-      thoracic.children = thoracic.children.slice(6, 18);
+      thoracic.children = thoracic.children.slice( 6, 18 );
       scene.add( thoracic );
 
       //шейный отдел 
       cervical = bones.clone();
-      cervical.children= cervical.children.slice(18, 25);
+      cervical.children= cervical.children.slice( 18, 25 );
       scene.add( cervical );
 
       // копчик
       sacrum = bones.clone();
-      sacrum.children= sacrum.children.slice(5, 6);
+      sacrum.children= sacrum.children.slice( 5, 6 );
       scene.add ( sacrum );
 
     } );
@@ -141,7 +152,7 @@ function loader() {
                  }
              } );
              absorbers = glb.scene;                           
-             absorbers.scale.set(0.06,0.06,0.06);
+             absorbers.scale.set( 0.06, 0.06, 0.06 );
              absorbers.position.y = -18;
              scene.add( absorbers );
     } );
@@ -156,47 +167,18 @@ function loader() {
             }
         } );
         cord = glb.scene;                           
-        cord.scale.set(0.06,0.06,0.06);
+        cord.scale.set (0.06, 0.06, 0.06);
         cord.position.y = -18;
-     //   cord.visible = true;
         scene.add( cord );
         render();	
     } );
 
     //--------------custom-----------------------------
     
-    c_sprite = makeTextSprite( " Шейный отдел ", 
-    { fontsize: 20, borderColor: {r:0, g:0, b:0, a:1.0}, backgroundColor: {r:100, g:100, b:100, a:0} } );
-    c_sprite.scale.set(15, 11, 0);
-    c_sprite.position.set(9,7,1);
-    scene.add( c_sprite );
-    //----------------------------------------
-    t_sprite = makeTextSprite( " Грудной отдел ", 
-    { fontsize: 20, borderColor: {r:0, g:0, b:0, a:1.0}, backgroundColor: {r:100, g:100, b:100, a:0} } );
-    t_sprite.scale.set(15, 11, 0);
-    t_sprite.position.set(11,-2,1);
-    scene.add( t_sprite );
-    //--------------------------------------------------
-    l_sprite = makeTextSprite( " Поясничный отдел ", 
-    { fontsize: 20, borderColor: {r:0, g:0, b:0, a:1.0}, backgroundColor: {r:100, g:100, b:100, a:0} } );
-    l_sprite.scale.set(15, 11, 0);
-    l_sprite.position.set(9,-14,1);
-    scene.add( l_sprite );
-
-    //--------------------------------------------------
-    s_sprite = makeTextSprite( " Крестцовый отдел ", 
-    { fontsize: 20, borderColor: {r:0, g:0, b:0, a:1.0}, backgroundColor: {r:100, g:100, b:100, a:0} } );
-    s_sprite.scale.set(15, 11, 0);
-    s_sprite.position.set(12,-19,1);
-    scene.add( s_sprite );
-    //--------------------------------------------------
-
-    spriteVisible(false);
 }
 
   function Lighting() {
-
-        var ambientLight = new THREE.AmbientLight( 0xcccccc, 0. );
+        var ambientLight = new THREE.AmbientLight( 0xcccccc, 0 );
         scene.add( ambientLight );
 
         var pointLight = new THREE.PointLight( 0xffffff, 0.8 );
@@ -316,26 +298,7 @@ function spriteVisible(boolean) {
         s_sprite.visible  = true;
     }
 }
-
-// -  - - - - - - - Creating Lable - - - - - - - - - - - - - - - 
-
-
-
-// -  - - - - - - - END Lable Block - - - - - - - - - - - - - - - 
-function showingSprites() {
-
-    /*
-    var spriteMap = new THREE.TextureLoader().load( "sprite.png" );
-    var spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap } );
-    var sprite = new THREE.Sprite( spriteMaterial );
-    sprite.scale.set(5, 5, 5);
-    scene.add( sprite );
-*/
-  //  console.log(sprite);
-    render();
-}
-
-
+//--------------BUTTONS BEGIN--------------------------
 //------------- making screenshot -------------------
 // getting acces to canvas
 const canvas = container.children[0];
@@ -358,7 +321,52 @@ const elem = document.querySelector('#screenshot');
        a.click();
     };
   }());
-//---------------------------------------------------------
+
+ 
+  function changeBackground() {
+    if (scene.background == backgroundColor) {
+        scene.background = envMap;
+    } else {
+        scene.background = backgroundColor;
+    }
+    render();
+  }
+
+
+//-------------------BUTTONS END---------------------------------------------
+//-------------------BEGIN SPRITE BLOCK--------------------------------------
+//---------------------------------------------------------------------------
+
+ function spineSprites(){
+    c_sprite = makeTextSprite( " Шейный отдел ", 
+    { fontsize: 20, borderColor: {r:0, g:0, b:0, a:1.0}, backgroundColor: {r:100, g:100, b:100, a:0} } );
+    c_sprite.scale.set(15, 11, 0);
+    c_sprite.position.set(9,7,1);
+    scene.add( c_sprite );
+    //----------------------------------------
+    t_sprite = makeTextSprite( " Грудной отдел ", 
+    { fontsize: 20, borderColor: {r:0, g:0, b:0, a:1.0}, backgroundColor: {r:100, g:100, b:100, a:0} } );
+    t_sprite.scale.set(15, 11, 0);
+    t_sprite.position.set(11,-2,1);
+    scene.add( t_sprite );
+    //--------------------------------------------------
+    l_sprite = makeTextSprite( " Поясничный отдел ", 
+    { fontsize: 20, borderColor: {r:0, g:0, b:0, a:1.0}, backgroundColor: {r:100, g:100, b:100, a:0} } );
+    l_sprite.scale.set(15, 11, 0);
+    l_sprite.position.set(9,-14,1);
+    scene.add( l_sprite );
+
+    //--------------------------------------------------
+    s_sprite = makeTextSprite( " Крестцовый отдел ", 
+    { fontsize: 20, borderColor: {r:0, g:0, b:0, a:1.0}, backgroundColor: {r:100, g:100, b:100, a:0} } );
+    s_sprite.scale.set(15, 11, 0);
+    s_sprite.position.set(12,-19,1);
+    scene.add( s_sprite );
+    //--------------------------------------------------
+
+    spriteVisible(false);
+ }  
+
 
 function makeTextSprite( message, parameters )
 {
@@ -371,7 +379,7 @@ function makeTextSprite( message, parameters )
 		parameters["fontsize"] : 18;
 	
 	var borderThickness = parameters.hasOwnProperty("borderThickness") ? 
-		parameters["borderThickness"] : 4;
+		parameters["borderThickness"] : 2;
 	
 	var borderColor = parameters.hasOwnProperty("borderColor") ?
 		parameters["borderColor"] : { r:0, g:0, b:0, a:1.0 };
@@ -382,7 +390,8 @@ function makeTextSprite( message, parameters )
 	var spriteAlignment = THREE.SpriteAlignment;
 		
 	var canvas = document.createElement('canvas');
-	var context = canvas.getContext('2d');
+    var context = canvas.getContext('2d');
+    console.log(canvas);
 	context.font = "Bold " + fontsize + "px " + fontface;
     
 	// get size data (height depends only on font size)
@@ -432,3 +441,4 @@ function roundRect(ctx, x, y, w, h, r)
     ctx.fill();
 	ctx.stroke();   
 }
+//---------------------------END SPRITE BLOCK--------------------------------

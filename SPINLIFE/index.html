@@ -5,13 +5,13 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
         <link type="text/css" rel="stylesheet" href="main.css">
-        <script src="three.js"></script>
-        <script src="OrbitControls.js"></script>
-		<script src="GLTFLoader.js"></script>
-		<script src="DRACOLoader.js"></script>
-		<script src="RGBELoader.js"></script>
-		<script src="dat.gui.min.js"></script>
-		<script src="jquery-3.5.1.min.js"></script>
+        <script src="js/three.js"></script>
+        <script src="js/OrbitControls.js"></script>
+		<script src="js/GLTFLoader.js"></script>
+		<script src="js/DRACOLoader.js"></script>
+		<script src="js/RGBELoader.js"></script>
+		<script src="js/dat.gui.min.js"></script>
+		<script src="js/jquery-3.5.1.min.js"></script>
 		
      <!--   <script src="RoughnessMipmapper.js"></script> -->
 	</head>
@@ -26,7 +26,7 @@
 	
 		<button class="buttons" id="screenshot" type="button">Save</button>
 		
-		<button class="buttons" id="hdr" type="button">HDR</button>
+		<button class="buttons" id="hdr" type="button" onclick="changeBackground()">HDR</button>
 		<button class="buttons" id="skin" type="button">Skin</button>
 		<!--
 		<button  class="buttons" id="lables" type="button" onclick="showingSprites()">C1L1</button>
@@ -34,6 +34,10 @@
 		<input type="range" min="0" max="100" step="2" oninput="range()" id='range'>
 
 		
+
+
+		<script src = 'script.js'></script>	
+
 		<script>
 			$(window).on("load",function (){
 			    $(".loading").fadeOut(500);
@@ -41,11 +45,6 @@
 		</script>
 		
 
-		<script src = 'script.js'></script>	
-
-		<!--Simple range organization -->
-	
-		<!-- <p id="paragraph"></p> -->
 
 	</body>
 </html>
