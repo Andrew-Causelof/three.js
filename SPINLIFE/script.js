@@ -4,6 +4,17 @@ var camera, scene, renderer;
 // so defenetly it needs to do configurator right here 
 var pmremGenerator, envMap, backgroundColor;  // clinic environement - global variables
 var absorberColor = new THREE.MeshMatcapMaterial({ color: 0x178FFF });
+
+const texturLoader = new THREE.TextureLoader();
+
+const boneColor = new THREE.MeshBasicMaterial({
+  map: texturLoader.load('boneTexture/1.jpg'),
+});
+
+//absorberColor = new THREE.MeshBasicMaterial({
+ //   map: texturLoader.load('boneTexture/absorber_2.jpg'),
+ // });
+
 //var brainColor = new THREE.MeshMatcapMaterial({ color: 0x660000 });
 //var boneColor = new THREE.MeshMatcapMaterial({ color: 0xeae8dc });
 
@@ -39,7 +50,7 @@ function init() {
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	renderer.toneMapping = THREE.ACESFilmicToneMapping;
-	renderer.toneMappingExposure = 0.3;
+	renderer.toneMappingExposure = 0.2;
     renderer.outputEncoding = THREE.sRGBEncoding;
     container.appendChild( renderer.domElement );
 
@@ -87,7 +98,8 @@ function RGBELoader() {
                     render();	
     } );  
 }
-
+// ---------no need any more, changed by RGBE loader-------
+//--------in the end it may be removed from the code------
 function backgroundtextureLoader() {
     const loader = new THREE.CubeTextureLoader();
     const texture = loader.load([
@@ -101,6 +113,7 @@ function backgroundtextureLoader() {
     scene.background = texture;
     scene.environment = texture;
 }
+//----------------------------------------------------------------
 
 function loader() {
 
@@ -111,7 +124,7 @@ function loader() {
         glb.scene.traverse( function ( child ) {
             if ( child.isMesh ) {
                 child.castShadow = true;
-               // child.material = boneColor;
+                //child.material = boneColor;
             
             }
         } );
@@ -123,6 +136,8 @@ function loader() {
       lumbar = bones.clone();
       lumbar.children = lumbar.children.slice( 0, 5 );
       scene.add( lumbar );
+
+      console.log( lumbar );
     
       //грудной отдел
       thoracic = bones.clone();
@@ -149,6 +164,7 @@ function loader() {
                  if ( child.isMesh ) {
                      child.castShadow = true;
                      child.material = absorberColor;
+                     //child.material = boneColor;
                  }
              } );
              absorbers = glb.scene;                           
@@ -164,6 +180,7 @@ function loader() {
         glb.scene.traverse( function ( child ) {
             if ( child.isMesh ) {
                 child.castShadow = true;
+                //child.material = boneColor;
             }
         } );
         cord = glb.scene;                           
@@ -198,7 +215,7 @@ function range() {
     if (range.value > 40 && range.value < 60) {
         bonesMoving(0);
         absorbers.position.x = 0;
-        cord.position.x = 0;
+        cord.position.x      = 0;
 
         spriteVisible(false);
         bonesVisible(true); 
@@ -227,22 +244,20 @@ function range() {
         absorbers.visible = false;
         bonesVisible(false); 
         spriteVisible(false);
-
     }
 
     if (range.value <= 15) {
 
         bonesVisible(true);
-        cord.visible = false;
+        cord.visible      = false;
         absorbers.visible = false;
 
         spriteVisible(true); 
 
         cervical.position.x = -1;
-        thoracic.position.x = 1;
+        thoracic.position.x =  1;
         lumbar.position.x   = -1;
-        sacrum.position.x   = 1;
-        
+        sacrum.position.x   =  1;  
     }
 
 
@@ -391,7 +406,6 @@ function makeTextSprite( message, parameters )
 		
 	var canvas = document.createElement('canvas');
     var context = canvas.getContext('2d');
-    console.log(canvas);
 	context.font = "Bold " + fontsize + "px " + fontface;
     
 	// get size data (height depends only on font size)
