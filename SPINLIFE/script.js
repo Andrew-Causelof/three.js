@@ -5,18 +5,18 @@ var camera, scene, renderer;
 var pmremGenerator, envMap, backgroundColor;  // clinic environement - global variables
 var absorberColor = new THREE.MeshMatcapMaterial({ color: 0x178FFF });
 
-const texturLoader = new THREE.TextureLoader();
+//const texturLoader = new THREE.TextureLoader();
 
-const boneColor = new THREE.MeshBasicMaterial({
-  map: texturLoader.load('boneTexture/1.jpg'),
-});
+//const boneColor = new THREE.MeshBasicMaterial({
+//  map: texturLoader.load('boneTexture/1.jpg'),
+//});
 
 //absorberColor = new THREE.MeshBasicMaterial({
  //   map: texturLoader.load('boneTexture/absorber_2.jpg'),
  // });
 
 //var brainColor = new THREE.MeshMatcapMaterial({ color: 0x660000 });
-//var boneColor = new THREE.MeshMatcapMaterial({ color: 0xeae8dc });
+var boneColor = new THREE.MeshMatcapMaterial({ color: 0xeae8dc });
 
 //var bones, absorbers, cord;
 var  absorbers, cord;
@@ -50,7 +50,7 @@ function init() {
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	renderer.toneMapping = THREE.ACESFilmicToneMapping;
-	renderer.toneMappingExposure = 0.2;
+	renderer.toneMappingExposure = 0.4;
     renderer.outputEncoding = THREE.sRGBEncoding;
     container.appendChild( renderer.domElement );
 
@@ -62,7 +62,7 @@ function init() {
     RGBELoader();
    // backgroundtextureLoader(); 
     spineSprites();
-    //Lighting();
+    Lighting();
 
 	controls = new THREE.OrbitControls( camera, renderer.domElement );
 	controls.addEventListener( 'change', render ); // using cos there is no animation loop
@@ -120,15 +120,15 @@ function loader() {
     var loader = new THREE.GLTFLoader().setPath( 'models/' );
     var bones;
 
-    loader.load( 'bones.gltf', function ( glb ) {
+    loader.load( 'bones_texture.glb', function ( glb ) {
         glb.scene.traverse( function ( child ) {
             if ( child.isMesh ) {
                 child.castShadow = true;
                 //child.material = boneColor;
-            
             }
         } );
-        bones = glb.scene;                           
+        bones = glb.scene;  
+        console.log(bones);                         
         bones.scale.set( 0.06, 0.06, 0.06 );
         bones.position.y = -18;
 
@@ -136,8 +136,6 @@ function loader() {
       lumbar = bones.clone();
       lumbar.children = lumbar.children.slice( 0, 5 );
       scene.add( lumbar );
-
-      console.log( lumbar );
     
       //грудной отдел
       thoracic = bones.clone();
@@ -175,7 +173,7 @@ function loader() {
     
 
     // Downloading human cord
-    loader.load( 'cord.gltf', function ( glb ) {
+    loader.load( 'cord.glb', function ( glb ) {
          
         glb.scene.traverse( function ( child ) {
             if ( child.isMesh ) {

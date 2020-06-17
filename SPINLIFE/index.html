@@ -10,13 +10,18 @@
 		<script src="js/GLTFLoader.js"></script>
 		<script src="js/DRACOLoader.js"></script>
 		<script src="js/RGBELoader.js"></script>
-		<script src="js/dat.gui.min.js"></script>
 		<script src="js/jquery-3.5.1.min.js"></script>
 		
      <!--   <script src="RoughnessMipmapper.js"></script> -->
 	</head>
-
 	<body>
+
+		<script>
+			$(window).on("load",function (){
+			    $(".loading").fadeOut(500);
+			});
+		</script>
+		
 
 		<div class="loading">
 			<div class="load-circle">
@@ -38,12 +43,7 @@
 
 		<script src = 'script.js'></script>	
 
-		<script>
-			$(window).on("load",function (){
-			    $(".loading").fadeOut(500);
-			});
-		</script>
-		
+
 
 
 	</body>
