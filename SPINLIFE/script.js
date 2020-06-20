@@ -156,12 +156,12 @@ function loader() {
     
     // Downloading absorbers
 
-     loader.load( 'absorbers.gltf', function ( glb ) {
+     loader.load( 'absorbers.glb', function ( glb ) {
          
              glb.scene.traverse( function ( child ) {
                  if ( child.isMesh ) {
                      child.castShadow = true;
-                     child.material = absorberColor;
+                     //child.material = absorberColor;
                      //child.material = boneColor;
                  }
              } );
