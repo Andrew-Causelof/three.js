@@ -50,13 +50,16 @@ body {
 
   .buttons {
 	position: absolute;
-	padding: 10px;
+	padding: 0px 1px;
+	font-size: 12px;
 	background: rgba(0,0,0,0.9);
 	color: white;
 	border: 1px solid white;
 	cursor: pointer;
-	width: 50px;
+	width: 60px;
 	height: 40px;
+	text-align: center;
+	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   }
 
   .buttons:hover {
@@ -99,12 +102,6 @@ body {
   }
 
 
-
-
-
-
-
-
   input[type=range] {
 	height: 36px;
 	-webkit-appearance: none;
@@ -122,7 +119,7 @@ body {
 	box-shadow: 0px 0px 0px #050505;
 	background: #000000;
 	border-radius: 0px;
-	border: 0px solid #000000;
+	border: 1px solid #ffffff;
   }
   input[type=range]::-webkit-slider-thumb {
 	box-shadow: 0px 0px 5px #000000;
@@ -146,11 +143,11 @@ body {
 	box-shadow: 0px 0px 0px #050505;
 	background: #000000;
 	border-radius: 0px;
-	border: 0px solid #000000;
+	border: 1px solid #ffffff;
   }
   input[type=range]::-moz-range-thumb {
 	box-shadow: 0px 0px 5px #000000;
-	border: 0px solid #000000;
+	border: 1px solid #ffffff;
 	height: 30px;
 	width: 31px;
 	border-radius: 30px;
@@ -168,20 +165,20 @@ body {
   }
   input[type=range]::-ms-fill-lower {
 	background: #000000;
-	border: 0px solid #000000;
+	border: 1px solid #ffffff;
 	border-radius: 0px;
 	box-shadow: 0px 0px 0px #050505;
   }
   input[type=range]::-ms-fill-upper {
 	background: #000000;
-	border: 0px solid #000000;
+	border: 1px solid #ffffff;
 	border-radius: 0px;
 	box-shadow: 0px 0px 0px #050505;
   }
   input[type=range]::-ms-thumb {
 	margin-top: 1px;
 	box-shadow: 0px 0px 5px #000000;
-	border: 0px solid #000000;
+	border: 1px solid #ffffff;
 	height: 30px;
 	width: 31px;
 	border-radius: 30px;

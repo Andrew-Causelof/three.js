@@ -11,6 +11,8 @@
 		<script src="js/DRACOLoader.js"></script>
 		<script src="js/RGBELoader.js"></script>
 		<script src="js/jquery-3.5.1.min.js"></script>
+
+	<!--	<link rel="stylesheet" href="./fonts/Oswald-Bold.ttf"> -->
 		
      <!--   <script src="RoughnessMipmapper.js"></script> -->
 	</head>
@@ -18,7 +20,7 @@
 
 		<script>
 			$(window).on("load",function (){
-			    $(".loading").fadeOut(500);
+			    $(".loading").fadeOut(1000);
 			});
 		</script>
 		
@@ -29,22 +31,14 @@
 		</div>
 
 	
-		<button class="buttons" id="screenshot" type="button">Save</button>
+		<button class="buttons" id="screenshot" type="button">Сохранить</button>
 		
-		<button class="buttons" id="hdr" type="button" onclick="changeBackground()">HDR</button>
-		<button class="buttons" id="skin" type="button">Skin</button>
-		<!--
-		<button  class="buttons" id="lables" type="button" onclick="showingSprites()">C1L1</button>
-		-->
+		<button class="buttons" id="hdr" type="button" onclick="changeBackground()">Фон</button>
+
 		<input type="range" min="0" max="100" step="2" oninput="range()" id='range'>
 
 		
-
-
 		<script src = 'script.js'></script>	
-
-
-
 
 	</body>
 </html>

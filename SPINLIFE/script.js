@@ -5,17 +5,6 @@ var camera, scene, renderer;
 var pmremGenerator, envMap, backgroundColor;  // clinic environement - global variables
 var absorberColor = new THREE.MeshMatcapMaterial({ color: 0x178FFF });
 
-//const texturLoader = new THREE.TextureLoader();
-
-//const boneColor = new THREE.MeshBasicMaterial({
-//  map: texturLoader.load('boneTexture/1.jpg'),
-//});
-
-//absorberColor = new THREE.MeshBasicMaterial({
- //   map: texturLoader.load('boneTexture/absorber_2.jpg'),
- // });
-
-//var brainColor = new THREE.MeshMatcapMaterial({ color: 0x660000 });
 var boneColor = new THREE.MeshMatcapMaterial({ color: 0xeae8dc });
 
 //var bones, absorbers, cord;
@@ -33,13 +22,12 @@ camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight
  camera.position.set( 0, 0, 40 ); //use for sprites only
 scene = new THREE.Scene();
 
-//scene.background = new THREE.Color('white');
-backgroundColor = new THREE.Color(0x485770);
-//scene.background = new THREE.Color(0x9c9a97);
-/*
-var helper = new THREE.CameraHelper( camera );
-scene.add( helper );
-*/
+
+backgroundBlue = new THREE.Color(0x485770); //Global variable for Blue background
+backgroundBlack = new THREE.Color(0x000000); //Global variable for Black background
+backgroundSwitcher = 0;
+
+
 
 init();
 render();
@@ -59,10 +47,8 @@ function init() {
     pmremGenerator.compileEquirectangularShader();
 
     loader();
-    RGBELoader();
-   // backgroundtextureLoader(); 
+    RGBELoader(); 
     spineSprites();
-    Lighting();
 
 	controls = new THREE.OrbitControls( camera, renderer.domElement );
 	controls.addEventListener( 'change', render ); // using cos there is no animation loop
@@ -75,6 +61,7 @@ function init() {
 
 }
 
+// resizing scene if window has been resized
 function onWindowResize() {
 
 	camera.aspect = window.innerWidth / window.innerHeight;
@@ -84,43 +71,32 @@ function onWindowResize() {
 
 }
 
+// simply render function
 function render() {
 	renderer.render( scene, camera );
 }
-
+// loading clinic HDR texture, but dont set up scene background
 function RGBELoader() {
-    new THREE.RGBELoader().setDataType( THREE.UnsignedByteType ).setPath( 'textures/' ).load( 'surgery_1k.hdr',
+    new THREE.RGBELoader().setDataType( THREE.UnsignedByteType ).setPath( 'textures/' ).load( 'clinic.hdr',
     function ( texture ) {
                     envMap = pmremGenerator.fromEquirectangular( texture ).texture;
                     //scene.background = envMap;
                     scene.environment = envMap;
-                    scene.background = backgroundColor;                  
+                    scene.background = backgroundBlack;                  
                     render();	
     } );  
 }
-// ---------no need any more, changed by RGBE loader-------
-//--------in the end it may be removed from the code------
-function backgroundtextureLoader() {
-    const loader = new THREE.CubeTextureLoader();
-    const texture = loader.load([
-      'backgroundtexture/pos-x.jpg',
-      'backgroundtexture/neg-x.jpg',
-      'backgroundtexture/pos-y.jpg',
-      'backgroundtexture/neg-y.jpg',
-      'backgroundtexture/pos-z.jpg',
-      'backgroundtexture/neg-z.jpg',
-    ]);
-    scene.background = texture;
-    scene.environment = texture;
-}
-//----------------------------------------------------------------
+
+// Loading bones , absorbers and cord as 3 separate objects
+// it could be merged in one , but file will be weight amount of 3 files, and code will be not readable
+
 
 function loader() {
 
     var loader = new THREE.GLTFLoader().setPath( 'models/' );
     var bones;
 
-    loader.load( 'bones_texture.glb', function ( glb ) {
+    loader.load( 'bones_texture_2.glb', function ( glb ) {
         glb.scene.traverse( function ( child ) {
             if ( child.isMesh ) {
                 child.castShadow = true;
@@ -152,6 +128,8 @@ function loader() {
       sacrum.children= sacrum.children.slice( 5, 6 );
       scene.add ( sacrum );
 
+      render();
+
     } );
     
     // Downloading absorbers
@@ -160,7 +138,7 @@ function loader() {
          
              glb.scene.traverse( function ( child ) {
                  if ( child.isMesh ) {
-                     child.castShadow = true;
+                    // child.castShadow = true;
                      //child.material = absorberColor;
                      //child.material = boneColor;
                  }
@@ -169,6 +147,7 @@ function loader() {
              absorbers.scale.set( 0.06, 0.06, 0.06 );
              absorbers.position.y = -18;
              scene.add( absorbers );
+             render();
     } );
     
 
@@ -192,17 +171,9 @@ function loader() {
     
 }
 
-  function Lighting() {
-        var ambientLight = new THREE.AmbientLight( 0xcccccc, 0 );
-        scene.add( ambientLight );
 
-        var pointLight = new THREE.PointLight( 0xffffff, 0.8 );
-        camera.add( pointLight );
-  }
-
+// so here is written logic for range
 function range() {
-
-    
 
     var range = document.getElementById('range');
 
@@ -210,6 +181,7 @@ function range() {
 
     var sliding = range.value / 15;
 
+// centred bones, absorbers and cord
     if (range.value > 40 && range.value < 60) {
         bonesMoving(0);
         absorbers.position.x = 0;
@@ -220,7 +192,6 @@ function range() {
         absorbers.visible = true; 
         cord.visible      = true;
     }
-
     if (range.value < 40 && range.value > 25) {
         absorbers.visible = false;
         cord.visible      = true;
@@ -274,7 +245,7 @@ function range() {
     render();
 }
 
-
+// managing visible options for bones
 function bonesVisible(boolean) {
     if (boolean == false) {
         lumbar.visible   = false;
@@ -289,7 +260,7 @@ function bonesVisible(boolean) {
     }
     render();
 }
-
+// moving bones at X position
 function bonesMoving(x) {
     lumbar.position.x   = x;
     thoracic.position.x = x;
@@ -298,6 +269,7 @@ function bonesMoving(x) {
     render();
 }
 
+// managing visible otions for sprites
 function spriteVisible(boolean) {
     if (boolean == false) {
         c_sprite.visible  = false;
@@ -311,8 +283,12 @@ function spriteVisible(boolean) {
         s_sprite.visible  = true;
     }
 }
+
 //--------------BUTTONS BEGIN--------------------------
 //------------- making screenshot -------------------
+//generaly this function was implemeneted to compare the difference between different textures,
+// aplying to bones and absorbers, but lately i decide it can help me in future
+
 // getting acces to canvas
 const canvas = container.children[0];
 const elem = document.querySelector('#screenshot');
@@ -335,12 +311,23 @@ const elem = document.querySelector('#screenshot');
     };
   }());
 
- 
+ // changing background "one color" - > HDR - > "one color" - >
   function changeBackground() {
-    if (scene.background == backgroundColor) {
-        scene.background = envMap;
-    } else {
-        scene.background = backgroundColor;
+
+    switch(backgroundSwitcher) {
+        case 0:
+            scene.background   = backgroundBlue;
+            backgroundSwitcher = 1;
+            break;
+
+        case 1:
+            scene.background   = envMap;
+            backgroundSwitcher = 2;
+            break;
+        case 2:
+            scene.background   = backgroundBlack;
+            backgroundSwitcher = 0;
+            break;
     }
     render();
   }
