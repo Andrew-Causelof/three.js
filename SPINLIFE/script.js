@@ -46,9 +46,10 @@ function init() {
     pmremGenerator = new THREE.PMREMGenerator( renderer );
     pmremGenerator.compileEquirectangularShader();
 
-    loader();
-    RGBELoader(); 
-    spineSprites();
+    loader();   // loading 3d models
+    RGBELoader();  // loading hdr
+    spineSprites(); // creating sprites for bones
+    spriteVisible(false); // hiding sprites
 
 	controls = new THREE.OrbitControls( camera, renderer.domElement );
 	controls.addEventListener( 'change', render ); // using cos there is no animation loop
@@ -339,32 +340,30 @@ const elem = document.querySelector('#screenshot');
 
  function spineSprites(){
     c_sprite = makeTextSprite( " Шейный отдел ", 
-    { fontsize: 20, borderColor: {r:0, g:0, b:0, a:1.0}, backgroundColor: {r:100, g:100, b:100, a:0} } );
+    { fontsize: 20, borderColor: {r:255, g:255, b:255, a:0.0}, backgroundColor: {r:0, g:0, b:0, a:0} } );
     c_sprite.scale.set(15, 11, 0);
     c_sprite.position.set(9,7,1);
     scene.add( c_sprite );
     //----------------------------------------
     t_sprite = makeTextSprite( " Грудной отдел ", 
-    { fontsize: 20, borderColor: {r:0, g:0, b:0, a:1.0}, backgroundColor: {r:100, g:100, b:100, a:0} } );
+    { fontsize: 20, borderColor: {r:0, g:0, b:0, a:0.0}, backgroundColor: {r:100, g:100, b:100, a:0} } );
     t_sprite.scale.set(15, 11, 0);
     t_sprite.position.set(11,-2,1);
     scene.add( t_sprite );
     //--------------------------------------------------
     l_sprite = makeTextSprite( " Поясничный отдел ", 
-    { fontsize: 20, borderColor: {r:0, g:0, b:0, a:1.0}, backgroundColor: {r:100, g:100, b:100, a:0} } );
+    { fontsize: 20, borderColor: {r:0, g:0, b:0, a:0.0}, backgroundColor: {r:100, g:100, b:100, a:0} } );
     l_sprite.scale.set(15, 11, 0);
     l_sprite.position.set(9,-14,1);
     scene.add( l_sprite );
 
     //--------------------------------------------------
     s_sprite = makeTextSprite( " Крестцовый отдел ", 
-    { fontsize: 20, borderColor: {r:0, g:0, b:0, a:1.0}, backgroundColor: {r:100, g:100, b:100, a:0} } );
+    { fontsize: 20, borderColor: {r:0, g:0, b:0, a:0.0}, backgroundColor: {r:100, g:100, b:100, a:0} } );
     s_sprite.scale.set(15, 11, 0);
     s_sprite.position.set(12,-19,1);
     scene.add( s_sprite );
     //--------------------------------------------------
-
-    spriteVisible(false);
  }  
 
 
@@ -409,7 +408,7 @@ function makeTextSprite( message, parameters )
 	// 1.4 is extra height factor for text below baseline: g,j,p,q.
 	
 	// text color
-	context.fillStyle = "rgba(0, 0, 0, 1.0)";
+	context.fillStyle = "rgba(139, 0, 0, 1.0)";
 
 	context.fillText( message, borderThickness, fontsize + borderThickness);
 	
@@ -441,3 +440,5 @@ function roundRect(ctx, x, y, w, h, r)
 	ctx.stroke();   
 }
 //---------------------------END SPRITE BLOCK--------------------------------
+
+
