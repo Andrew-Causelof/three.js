@@ -3,13 +3,12 @@ var camera, scene, renderer;
 
 // so defenetly it needs to do configurator right here 
 var pmremGenerator, envMap, backgroundColor;  // clinic environement - global variables
-var absorberColor = new THREE.MeshMatcapMaterial({ color: 0x178FFF });
-
-var boneColor = new THREE.MeshMatcapMaterial({ color: 0xeae8dc });
+//var absorberColor = new THREE.MeshMatcapMaterial({ color: 0x178FFF });
+//var boneColor = new THREE.MeshMatcapMaterial({ color: 0xeae8dc });
 
 //var bones, absorbers, cord;
 var  absorbers, cord;
-var lumbar, thoracic, cervical, sacrum;  
+var lumbar, thoracic, cervical, sacrum, coloredSpine;  
 //
 var c_sprite, t_sprite, l_sprite, s_sprite;
 //
@@ -51,11 +50,13 @@ function init() {
     spineSprites(); // creating sprites for bones
     spriteVisible(false); // hiding sprites
 
+
 	controls = new THREE.OrbitControls( camera, renderer.domElement );
 	controls.addEventListener( 'change', render ); // using cos there is no animation loop
 	controls.minDistance = 0.1;
 	controls.maxDistance = 100;
-    controls.target.set( 0, -1, 0 );
+    controls.target.set( 0, 0, 0 );
+    controls.screenSpacePanning = true;
     controls.update();
     
 	window.addEventListener( 'resize', onWindowResize, false );
@@ -81,7 +82,6 @@ function RGBELoader() {
     new THREE.RGBELoader().setDataType( THREE.UnsignedByteType ).setPath( 'textures/' ).load( 'clinic.hdr',
     function ( texture ) {
                     envMap = pmremGenerator.fromEquirectangular( texture ).texture;
-                    //scene.background = envMap;
                     scene.environment = envMap;
                     scene.background = backgroundBlack;                  
                     render();	
@@ -109,7 +109,14 @@ function loader() {
         bones.scale.set( 0.06, 0.06, 0.06 );
         bones.position.y = -18;
 
-              //поясничный отдел L1-L5
+      // making clone for colored spine
+      
+      coloredSpine = bones.clone();
+      coloredSpine.visible = false;
+      scene.add ( coloredSpine );
+      createColoredSpine(); // painting spine 
+
+     //поясничный отдел L1-L5
       lumbar = bones.clone();
       lumbar.children = lumbar.children.slice( 0, 5 );
       scene.add( lumbar );
@@ -214,20 +221,23 @@ function range() {
         absorbers.visible = false;
         bonesVisible(false); 
         spriteVisible(false);
+        coloredSpine.visible = false;
     }
 
     if (range.value <= 15) {
 
-        bonesVisible(true);
+        bonesVisible(false);
         cord.visible      = false;
         absorbers.visible = false;
 
         spriteVisible(true); 
-
+        
+      /*  
         cervical.position.x = -1;
         thoracic.position.x =  1;
         lumbar.position.x   = -1;
         sacrum.position.x   =  1;  
+      */  
     }
 
 
@@ -249,15 +259,17 @@ function range() {
 // managing visible options for bones
 function bonesVisible(boolean) {
     if (boolean == false) {
-        lumbar.visible   = false;
-        thoracic.visible = false;
-        cervical.visible = false;
-        sacrum.visible   = false;
+        lumbar.visible       = false;
+        thoracic.visible     = false;
+        cervical.visible     = false;
+        sacrum.visible       = false;
+        coloredSpine.visible = true;
     } else {
-        lumbar.visible   = true;
-        thoracic.visible = true;
-        cervical.visible = true;
-        sacrum.visible   = true;
+        lumbar.visible       = true;
+        thoracic.visible     = true;
+        cervical.visible     = true;
+        sacrum.visible       = true;
+        coloredSpine.visible = false;
     }
     render();
 }
@@ -333,6 +345,27 @@ const elem = document.querySelector('#screenshot');
     render();
   }
 
+  function createColoredSpine()
+  {
+    coloredSpine.children.forEach(function(bone, index) {
+        if (index >= 0 && index <= 4) {
+            bone.material = new THREE.MeshStandardMaterial({ color: 0xffc107 });
+        }
+
+        if (index >= 6 && index <= 17) {
+            bone.material = new THREE.MeshStandardMaterial({ color: 0x00008b });
+        }
+
+        if (index >= 18 && index <= 24) {
+            bone.material = new THREE.MeshStandardMaterial({ color: 0xcd0000 });
+        }
+
+        if (index == 5) {
+            bone.material = new THREE.MeshStandardMaterial({ color: 0x32cd32 });
+        }  
+    });
+  }
+
 
 //-------------------BUTTONS END---------------------------------------------
 //-------------------BEGIN SPRITE BLOCK--------------------------------------
@@ -342,26 +375,26 @@ const elem = document.querySelector('#screenshot');
     c_sprite = makeTextSprite( " Шейный отдел ", 
     { fontsize: 20, borderColor: {r:255, g:255, b:255, a:0.0}, backgroundColor: {r:0, g:0, b:0, a:0} } );
     c_sprite.scale.set(15, 11, 0);
-    c_sprite.position.set(9,7,1);
+    c_sprite.position.set(10,7,1);
     scene.add( c_sprite );
     //----------------------------------------
     t_sprite = makeTextSprite( " Грудной отдел ", 
     { fontsize: 20, borderColor: {r:0, g:0, b:0, a:0.0}, backgroundColor: {r:100, g:100, b:100, a:0} } );
     t_sprite.scale.set(15, 11, 0);
-    t_sprite.position.set(11,-2,1);
+    t_sprite.position.set(10,-2,1);
     scene.add( t_sprite );
     //--------------------------------------------------
     l_sprite = makeTextSprite( " Поясничный отдел ", 
     { fontsize: 20, borderColor: {r:0, g:0, b:0, a:0.0}, backgroundColor: {r:100, g:100, b:100, a:0} } );
     l_sprite.scale.set(15, 11, 0);
-    l_sprite.position.set(9,-14,1);
+    l_sprite.position.set(10,-14,1);
     scene.add( l_sprite );
 
     //--------------------------------------------------
     s_sprite = makeTextSprite( " Крестцовый отдел ", 
     { fontsize: 20, borderColor: {r:0, g:0, b:0, a:0.0}, backgroundColor: {r:100, g:100, b:100, a:0} } );
     s_sprite.scale.set(15, 11, 0);
-    s_sprite.position.set(12,-19,1);
+    s_sprite.position.set(10,-19,1);
     scene.add( s_sprite );
     //--------------------------------------------------
  }  
