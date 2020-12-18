@@ -1,0 +1,12 @@
+# Blender MTL File: 'bottle_no_sticker.blend'
+# Material Count: 1
+
+newmtl Стекло
+Ns 720.655022
+Ka 1.000000 1.000000 1.000000
+Kd 0.472946 0.800000 0.790787
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 0.200000
+illum 9
