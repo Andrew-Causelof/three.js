@@ -18,8 +18,9 @@ import * as THREE from '../build/three.module.js';
 				container = document.createElement( 'div' );
 				document.body.appendChild( container );
 
-				camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 10000 );
-				camera.position.z = 2000;
+				camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.z = 1600;
+				
 
 				//cubemap
 				const path = 'textures/cube/';
@@ -36,6 +37,7 @@ import * as THREE from '../build/three.module.js';
 
 				scene = new THREE.Scene();
 			 	scene.background = reflectionCube;
+			 	//scene.background = new THREE.Color(0x78716e);
 
 				//lights
 				const ambient = new THREE.AmbientLight( 0xffffff );
@@ -56,53 +58,47 @@ import * as THREE from '../build/three.module.js';
                 //const cubeMaterial3 = new THREE.MeshLambertMaterial( { color: 0xffffff, envMap: reflectionCube, refractionRatio: 0.9, opacity: 0.8,  transparent: true } );
                 //const stickerMaterial = new THREE.MeshLambertMaterial( { color: 0x1d1d29, envMap: reflectionCube, refractionRatio: 0.1,   transparent: false } );
                 // may be good for fluid //const bottleMaterial = new THREE.MeshMatcapMaterial( { color: 0xE3CA77, envMap: refractionCube, refractionRatio: 0.9, opacity: 0.7,  transparent: true } );
-                const bottleMaterial = new THREE.MeshPhongMaterial( { color: 0xE3CA77, envMap: refractionCube, refractionRatio: 0.9, opacity: 0.7,  transparent: true } );
-                const stickerMaterial = new THREE.MeshBasicMaterial( { color: 0x17171c, refractionRatio: 0.9,   transparent: false } );
-                const stickerTextur =  new THREE.MeshPhongMaterial({map: loader.load('textures/Popcorn.png')});
-                const bouchonMaterial = new THREE.MeshBasicMaterial( { color: 0x343438, envMap: reflectionCube, refractionRatio: 0.9,   transparent: false } );
+				const bottleMaterial = new THREE.MeshPhongMaterial( { color: 0xe84c09, envMap: refractionCube, refractionRatio: 0.85, opacity: 0.6,  transparent: true, side: THREE.DoubleSide } );
+				const syrupMaterial = new THREE.MeshPhongMaterial( { color: 0xe84c09, side: THREE.DoubleSide ,   opacity: 0.99,  transparent: false } );
+                const stickerMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, refractionRatio: 0.9,   transparent: false } );
+                const stickerTextur =  new THREE.MeshPhongMaterial( { color: 0x78716e, map: loader.load('textures/Popcorn.png'), side: THREE.DoubleSide });
+                const bouchonMaterial = new THREE.MeshPhongMaterial( { color: 0x78716e, map: loader.load('textures/CoctailSyrup.png'), refractionRatio: 0.3,  transparent: false } );
 
 				//models
 				const objLoader = new OBJLoader();
-
 				objLoader.setPath( 'models/obj/' );
-				objLoader.load( 'bottle_sticker.obj', function ( object ) {
+				objLoader.load( 'bottle_textures.obj', function ( object ) {
 
-                    console.log(object);
-                    
-                    
-                    const bouchon = object.children[ 0 ];
-                    const frontSticker =  object.children[ 1 ];
-                    const bottle = object.children[ 3 ];
-                    const rearSticker =  object.children[ 2 ];
+					console.log(object);
+					
+					const bottle = object.children[ 0 ];
+					const bouchon =  object.children[ 1 ];
+					const syrup =  object.children[ 2 ];
+                    const frontSticker =  object.children[ 3 ];
                     
 
-					bouchon.scale.multiplyScalar( 30 );
-					bouchon.position.y = - 500;
+					bottle.scale.multiplyScalar( 3 );  // bottle
+					bottle.position.y =  -590;
+					
+					
+                    bottle.material = bottleMaterial;
+                    
+                    bouchon.scale.multiplyScalar( 3 );  // пробка
+					bouchon.position.y = - 590;
                     bouchon.material = bouchonMaterial;
-                    
-                    frontSticker.scale.multiplyScalar( 30 );
-					frontSticker.position.y = - 500;
-                    frontSticker.material = stickerTextur;
-                    
-                    bottle.scale.multiplyScalar( 30 );
-					bottle.position.y = - 500;
-                    bottle.material = bottleMaterial ;
-                    
-                    rearSticker.scale.multiplyScalar( 30 );
-					rearSticker.position.y = - 500;
-					rearSticker.material = stickerMaterial ;
+               
+                    syrup.scale.multiplyScalar( 3.0 );
+					syrup.position.y = - 590;
+					syrup.material = syrupMaterial ;
 
-                    /*
-                    const head2 = head.clone();
-					head2.position.x = - 900;
-					head2.material = cubeMaterial2;
+					
+					frontSticker.scale.multiplyScalar( 3 );
+					frontSticker.position.y = - 590;
+					frontSticker.material = stickerTextur ;
 
-					const head3 = head.clone();
-					head3.position.x = 900;
-					head3.material = cubeMaterial3;
-                    */
-                    //scene.add( head, head2, head3 );
-                    scene.add( bouchon, frontSticker, bottle,rearSticker);
+                               
+					 scene.add( bouchon, frontSticker, syrup, bottle);
+				
 
 				} );
 
@@ -114,8 +110,8 @@ import * as THREE from '../build/three.module.js';
 
 				//controls
 				const controls = new OrbitControls( camera, renderer.domElement );
-				controls.enableZoom = false;
-				controls.enablePan = false;
+				controls.enableZoom = true;
+				controls.enablePan = true;
 				controls.minPolarAngle = Math.PI / 4;
 				controls.maxPolarAngle = Math.PI / 1.5;
 
