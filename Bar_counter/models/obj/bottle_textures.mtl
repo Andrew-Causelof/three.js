@@ -1,0 +1,45 @@
+# Blender MTL File: 'bottle_textures.blend'
+# Material Count: 4
+
+newmtl Plastic_-_Matte_(Gray)
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.006379 0.006379 0.006379
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\akozl\\Desktop\\three_js\\bottle_scene\\barline_front_page\\textures\\Popcorn.png
+map_d C:\\Users\\akozl\\Desktop\\three_js\\bottle_scene\\barline_front_page\\textures\\Popcorn.png
+
+newmtl Plastic_-_Matte_(Gray).001
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.043528 0.030796 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 0.095238
+illum 9
+
+newmtl Plastic_-_Matte_(Gray).002
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+
+newmtl колпачек
+Ns 21.972656
+Ka 1.000000 1.000000 1.000000
+Kd 0.004025 0.003347 0.006995
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:\\Users\\akozl\\Desktop\\three_js\\bottle_scene\\barline_front_page\\textures\\CoctailSyrup.png

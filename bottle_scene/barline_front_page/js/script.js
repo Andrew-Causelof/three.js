@@ -19,7 +19,7 @@ import * as THREE from '../build/three.module.js';
 				document.body.appendChild( container );
 
 				camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 10000 );
-				camera.position.z = 1600;
+				camera.position.z = 2000;
 				
 
 				//cubemap
@@ -36,18 +36,19 @@ import * as THREE from '../build/three.module.js';
 				refractionCube.mapping = THREE.CubeRefractionMapping;
 
 				scene = new THREE.Scene();
-			 	scene.background = reflectionCube;
-			 	//scene.background = new THREE.Color(0x78716e);
+			 	//scene.background = reflectionCube;
+			 	scene.background = new THREE.Color(0xffffff);
 
 				//lights
-				const ambient = new THREE.AmbientLight( 0xffffff );
+				const ambient = new THREE.AmbientLight( 0xffffff, 2 );
 				scene.add( ambient );
 
-				pointLight = new THREE.PointLight( 0xffffff, 1 );
-                scene.add( pointLight );
+				//pointLight = new THREE.PointLight( 0xffffff, 1, 100 );
+				//pointLight.position.set( 0, 0, 0 );
+                //scene.add( pointLight );
                 
-                const helper = new THREE.PointLightHelper( pointLight );
-                scene.add( pointLight );
+               // const helper = new THREE.PointLightHelper( pointLight , 10, 0x000000 );
+                //scene.add( pointLight );
 
                 //materials
                 const loader = new THREE.TextureLoader();
